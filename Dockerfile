@@ -12,13 +12,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies. `npm install` (not `npm ci`) because a generated app repo
-# may carry a lockfile that predates an edit to package.json; the version that
-# matters — lyzr-architect-pg — is pinned EXACTLY, so it resolves identically here,
-# in the sandbox, and on Netlify. (This comment used to claim the pin was "latest";
-# it has been exact since 0.1.4, which is what stopped the sandbox and the deployed
-# app running different package versions.)
-RUN npm install --no-audit --no-fund
+# Install exactly the dependency graph verified in package-lock.json.
+RUN npm ci --no-audit --no-fund
 
 # Copy source files
 COPY . .
@@ -53,6 +48,8 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Runtime retrieval reads the labeled synthetic JSONL fixtures from disk.
+COPY --from=builder --chown=nextjs:nodejs /app/data ./data
 
 # Start-time migrations need three things the standalone bundle does not trace,
 # because nothing in the app's request path imports them:
