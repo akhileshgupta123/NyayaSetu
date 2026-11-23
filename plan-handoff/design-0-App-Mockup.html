@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NyayaSetu App Mockup</title>
+<style>
+:root{
+  --ink:#0d0b12;--panel:#15141a;--panel2:#1d1b21;--paper:#f7f2e8;
+  --muted:#aaa4a0;--line:#3a3328;--saffron:#e6a833;--saffron2:#f4c565;
+  --green:#61b58c;--red:#dd786f;--blue:#7ba8d9;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#dedbd4;color:#eee;font:14px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.screen-wrap{max-width:1440px;margin:28px auto 54px;padding:0 22px}
+.screen-label{background:#fff;color:#25232a;border:1px solid #c9c5bc;border-bottom:0;padding:13px 18px;font-weight:750;letter-spacing:.01em}
+.app{min-height:780px;background:var(--ink);border:1px solid #28242b;box-shadow:0 22px 50px rgba(20,18,17,.20);overflow:hidden}
+.brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:18px}
+.mark{display:grid;place-items:center;width:34px;height:34px;border:1px solid #705729;border-radius:9px;color:var(--saffron)}
+.small{font-size:12px;color:var(--muted)}
+button,.button{border:0;border-radius:9px;padding:11px 16px;font-weight:750;cursor:pointer}
+.primary{background:var(--saffron);color:#1a1308}
+.secondary{background:#26232a;color:#eee;border:1px solid #3b3740}
+.input{width:100%;background:#111015;color:#eee;border:1px solid #38343d;border-radius:9px;padding:12px 13px;min-height:44px}
+label{display:block;color:#d7d1ca;font-size:12px;font-weight:700;margin-bottom:7px}
+.topbar{height:68px;padding:0 25px;border-bottom:1px solid #2c2830;display:flex;align-items:center;justify-content:space-between;background:#111015}
+.avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#2d281f;color:var(--saffron2);font-weight:800}
+.badge{display:inline-flex;align-items:center;gap:7px;border:1px solid #554526;background:#241e15;color:var(--saffron2);padding:5px 9px;border-radius:999px;font-size:11px;font-weight:750}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+.sidebar{width:245px;border-right:1px solid #2c2830;background:#111015;padding:20px 14px}
+.nav{padding:10px 12px;border-radius:8px;color:#aaa4a0;margin:4px 0}
+.nav.active{background:#29231b;color:#f3c873;border:1px solid #493a21}
+.shell{display:flex;min-height:712px}
+.main{flex:1;padding:30px}
+.card{background:var(--panel);border:1px solid #332e36;border-radius:13px;padding:20px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+h1,h2,h3,p{margin-top:0}
+h1{font-size:30px;line-height:1.18}
+h2{font-size:20px}
+.muted{color:var(--muted)}
+.rule{height:1px;background:#332f35;margin:18px 0}
+.auth{display:grid;grid-template-columns:1.08fr .92fr;min-height:780px}
+.auth-story{padding:60px;background:radial-gradient(circle at 25% 15%,#342814 0,transparent 35%),#0d0b12;display:flex;flex-direction:column;justify-content:space-between}
+.auth-panel{background:#f7f2e8;color:#242127;display:grid;place-items:center;padding:44px}
+.form{width:min(440px,100%)}
+.form .input{background:#fff;color:#242127;border-color:#d1c9bb}
+.form label{color:#514a43}
+.feature-list{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:640px}
+.feature{padding:15px;border:1px solid #443a2b;border-radius:11px;background:rgba(255,255,255,.025)}
+.compose{max-width:900px;margin:auto}
+.textarea{min-height:145px;resize:none}
+.amounts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.notice{background:#242018;border:1px solid #5e4a26;color:#e8d3a5;border-radius:10px;padding:13px}
+.process{display:flex;align-items:center;gap:9px;color:#938c86;font-size:12px;margin-top:18px}
+.process span{padding:6px 9px;border:1px solid #37323a;border-radius:999px}
+.process span.on{color:#f1c56b;border-color:#66502a;background:#241e15}
+.result-layout{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px}
+.answer{font-family:Georgia,serif;font-size:16px;line-height:1.75;color:#e8e2d9}
+.action{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid #312d34}
+.num{width:25px;height:25px;flex:0 0 25px;border-radius:50%;display:grid;place-items:center;background:#302719;color:#f2bd52;font-weight:800}
+.source{padding:14px;background:#111015;border:1px solid #37323a;border-radius:10px;margin-top:10px}
+.source-head{display:flex;justify-content:space-between;gap:12px;color:#f0c166;font-size:12px;font-weight:800}
+.metric{padding:17px;background:var(--panel);border:1px solid #332e36;border-radius:12px}
+.metric b{font-size:26px;display:block;margin-top:5px}
+.table{width:100%;border-collapse:collapse;margin-top:16px}
+.table th,.table td{text-align:left;border-bottom:1px solid #312d34;padding:12px 10px}
+.table th{color:#96908d;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.pass{color:var(--green)}.fail{color:var(--red)}.warn{color:var(--saffron2)}
+.bar{height:8px;background:#28242b;border-radius:10px;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;background:var(--saffron);width:71%}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+@media(max-width:900px){
+  .auth{grid-template-columns:1fr}.auth-story{min-height:430px;padding:35px}.auth-panel{padding:35px}
+  .sidebar{display:none}.result-layout,.grid3{grid-template-columns:1fr}.amounts,.grid2{grid-template-columns:1fr}
+  .app{min-height:auto}.feature-list{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<section class="screen-wrap">
+  <header class="screen-label">Screen 1 of 4 · Login &amp; Sign Up · Establish identity, consent, and processing expectations</header>
+  <div class="app auth">
+    <div class="auth-story">
+      <div class="brand"><span class="mark">न्या</span> NyayaSetu</div>
+      <div>
+        <span class="badge"><span class="dot"></span> Indian consumer-rights copilot</span>
+        <h1 style="font-size:48px;max-width:650px;margin:20px 0 14px">A clearer path through consumer grievance procedures.</h1>
+        <p class="muted" style="max-width:620px;font-size:16px">Research applicable consumer-law sources, understand jurisdiction, and organize your next procedural steps.</p>
+        <div class="feature-list" style="margin-top:30px">
+          <div class="feature"><b>Grounded research</b><div class="small">Answers linked to approved legal sources.</div></div>
+          <div class="feature"><b>Deterministic jurisdiction</b><div class="small">Commission selection uses versioned rules.</div></div>
+          <div class="feature"><b>PII redaction</b><div class="small">Contact details are removed before AI processing.</div></div>
+          <div class="feature"><b>Clear boundaries</b><div class="small">Information, not legal representation.</div></div>
+        </div>
+      </div>
+      <div class="small">NyayaSetu does not provide legal representation or predict case outcomes.</div>
+    </div>
+    <div class="auth-panel">
+      <div class="form">
+        <div style="color:#a56d08;font-weight:800">WELCOME BACK</div>
+        <h2 style="font-size:29px;margin:7px 0">Sign in to your workspace</h2>
+        <p style="color:#756d64;margin-bottom:25px">Access saved research and evaluation runs.</p>
+        <label>Email address</label><input class="input" value="researcher@example.in">
+        <div style="height:15px"></div>
+        <label>Password</label><input class="input" type="password" value="password">
+        <div style="display:flex;justify-content:space-between;margin:12px 0 20px;color:#766e66;font-size:12px">
+          <span>☑ Keep me signed in</span><span style="color:#9a680d">Forgot password?</span>
+        </div>
+        <button class="primary" style="width:100%">Sign in securely</button>
+        <p style="text-align:center;color:#756d64;margin:18px 0">New to NyayaSetu? <span style="color:#9a680d;font-weight:800">Create an account</span></p>
+        <div style="border-top:1px solid #d8d0c4;padding-top:17px;color:#756d64;font-size:11px">
+          AI synthesis uses hosted processing after local redaction. Legal queries should not include unnecessary personal details.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="screen-wrap">
+  <header class="screen-label">Screen 2 of 4 · Research Workspace · Capture a grievance and preview privacy controls</header>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand"><span class="mark">न्या</span> NyayaSetu</div>
+      <div style="display:flex;align-items:center;gap:13px"><span class="badge"><span class="dot"></span> Legal corpus ready</span><div class="avatar">AR</div></div>
+    </div>
+    <div class="shell">
+      <aside class="sidebar">
+        <button class="primary" style="width:100%;margin-bottom:17px">＋ New question</button>
+        <div class="nav active">Research workspace</div>
+        <div class="nav">Saved conversations</div>
+        <div class="nav">Source explorer</div>
+        <div class="nav">Evaluation lab</div>
+        <div class="rule"></div>
+        <div class="small" style="padding:0 10px 8px">RECENT</div>
+        <div class="nav">Defective refrigerator</div>
+        <div class="nav">Airline refund delay</div>
+        <div class="nav">Insurance service issue</div>
+      </aside>
+      <main class="main">
+        <div class="compose">
+          <div class="small" style="color:#dcae52;font-weight:800">GUIDED RESEARCH</div>
+          <h1 style="margin:5px 0 9px">What consumer issue can we help you understand?</h1>
+          <p class="muted">Avoid names, phone numbers, account numbers, and addresses. You can review redactions before processing.</p>
+          <div class="card" style="margin-top:24px">
+            <label>Describe the issue</label>
+            <textarea class="input textarea">I purchased a refrigerator for ₹78,000 in January. It stopped cooling after three weeks, and the seller has refused replacement despite two service visits.</textarea>
+            <div style="height:16px"></div>
+            <div class="amounts">
+              <div><label>Issue category</label><div class="input">Defective product⌄</div></div>
+              <div><label>Amount paid</label><div class="input">₹ 78,000</div></div>
+              <div><label>Compensation sought</label><div class="input">₹ 25,000</div></div>
+            </div>
+            <div class="notice" style="margin-top:16px">
+              <b>Privacy check passed</b><br><span class="small" style="color:#d4bd91">No email address or phone number detected. You will review the final redacted query before submission.</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:19px">
+              <span class="small">Information only · Not legal representation</span>
+              <div><button class="secondary">Save draft</button> <button class="primary">Review &amp; research →</button></div>
+            </div>
+          </div>
+          <div class="process"><span class="on">1 Describe</span>—<span>2 Review redaction</span>—<span>3 Research</span>—<span>4 Guidance</span></div>
+        </div>
+      </main>
+    </div>
+  </div>
+</section>
+
+<section class="screen-wrap">
+  <header class="screen-label">Screen 3 of 4 · Grounded Answer · Present procedure, jurisdiction, and inspectable evidence</header>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand"><span class="mark">न्या</span> NyayaSetu</div>
+      <div style="display:flex;gap:10px"><button class="secondary">Share</button><button class="secondary">Export</button><div class="avatar">AR</div></div>
+    </div>
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="nav">← Back to workspace</div>
+        <div class="rule"></div>
+        <div class="small" style="padding:0 10px 8px">THIS ANSWER</div>
+        <div class="nav active">Guidance</div>
+        <div class="nav">Jurisdiction</div>
+        <div class="nav">Sources · 3</div>
+        <div class="nav">Processing details</div>
+      </aside>
+      <main class="main">
+        <div class="result-layout">
+          <section>
+            <div style="display:flex;justify-content:space-between;gap:15px">
+              <div><div class="small" style="color:#dcae52;font-weight:800">DEFECTIVE PRODUCT</div><h1 style="margin:5px 0">You may pursue a consumer grievance for the unresolved defect.</h1></div>
+              <span class="badge" style="height:max-content"><span class="dot" style="color:var(--green)"></span> Evidence grounded</span>
+            </div>
+            <div class="card answer">
+              <p>Based on the information provided, the repeated failure to restore a newly purchased refrigerator may support a complaint concerning a product defect or deficiency in service. Preserve the invoice, warranty, service reports, written communications, and photographs or videos demonstrating the fault.</p>
+              <h3 style="font-family:Inter,sans-serif">Recommended next steps</h3>
+              <div class="action"><span class="num">1</span><span>Send the seller and manufacturer a concise written grievance through an official channel, stating the defect and remedy requested.</span></div>
+              <div class="action"><span class="num">2</span><span>Keep proof of delivery and allow the documented response period under the applicable channel.</span></div>
+              <div class="action"><span class="num">3</span><span>If unresolved, consider the appropriate consumer commission or the official online filing channel.</span></div>
+            </div>
+            <div class="notice" style="margin-top:15px"><b>Boundary:</b> NyayaSetu can explain filing information, but it cannot draft a filing-ready legal notice or predict your chance of success.</div>
+          </section>
+          <aside>
+            <div class="card" style="border-color:#604a24">
+              <div class="small" style="color:#dcae52;font-weight:800">DETERMINISTIC RESULT</div>
+              <h2 style="margin:7px 0">District Commission</h2>
+              <p class="muted">Calculated from the recorded consideration value using the active jurisdiction-rule version.</p>
+              <div class="grid2">
+                <div><div class="small">Amount used</div><b>₹78,000</b></div>
+                <div><div class="small">Rule version</div><b>2021</b></div>
+              </div>
+            </div>
+            <div class="card" style="margin-top:14px">
+              <div style="display:flex;justify-content:space-between"><h2>Supporting sources</h2><span class="small">Top 3</span></div>
+              <div class="source"><div class="source-head"><span>CPA 2019 · Section 35</span><span>94%</span></div><p class="small" style="margin:8px 0 0">Manner in which a complaint shall be made...</p></div>
+              <div class="source"><div class="source-head"><span>Jurisdiction Rules · 2021</span><span>91%</span></div><p class="small" style="margin:8px 0 0">Pecuniary jurisdiction determined using consideration...</p></div>
+              <div class="source"><div class="source-head"><span>Approved corpus · Product defect</span><span>86%</span></div><p class="small" style="margin:8px 0 0">Evidence commonly retained for defective-goods disputes...</p></div>
+            </div>
+          </aside>
+        </div>
+      </main>
+    </div>
+  </div>
+</section>
+
+<section class="screen-wrap">
+  <header class="screen-label">Screen 4 of 4 · Evaluation Lab · Compare experiment performance and inspect failures</header>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand"><span class="mark">न्या</span> NyayaSetu <span class="small">/ Evaluation Lab</span></div>
+      <div style="display:flex;gap:10px"><button class="secondary">Export results</button><button class="primary">Run evaluation</button><div class="avatar">AR</div></div>
+    </div>
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="nav">Research workspace</div>
+        <div class="nav">Saved conversations</div>
+        <div class="nav active">Evaluation lab</div>
+        <div class="nav">Prompt versions</div>
+        <div class="rule"></div>
+        <div class="small" style="padding:0 10px 8px">RUNS</div>
+        <div class="nav">Run 024 · Complete</div>
+        <div class="nav">Run 023 · Complete</div>
+        <div class="nav">Run 022 · Failed</div>
+      </aside>
+      <main class="main">
+        <div style="display:flex;justify-content:space-between;gap:20px;align-items:end">
+          <div><div class="small" style="color:#dcae52;font-weight:800">GOLD SET · RUN 024</div><h1 style="margin:5px 0">Evaluation performance</h1><p class="muted">Few-shot · RAG enabled · 80 cases · Completed 18 minutes ago</p></div>
+          <div class="toolbar"><button class="secondary">Few-shot⌄</button><button class="secondary">RAG enabled⌄</button><button class="secondary">All categories⌄</button></div>
+        </div>
+        <div class="grid3" style="margin-top:21px">
+          <div class="metric"><span class="small">OVERALL ACCURACY</span><b>74.2%</b><span class="pass">+55.2 pts from baseline</span></div>
+          <div class="metric"><span class="small">RECALL@3</span><b>92.6%</b><span class="pass">Target exceeded</span></div>
+          <div class="metric"><span class="small">JURISDICTION</span><b>100%</b><span class="pass">30 / 30 correct</span></div>
+        </div>
+        <div class="grid2" style="margin-top:14px">
+          <div class="card">
+            <h2>Experiment comparison</h2>
+            <div class="small">Few-shot + RAG</div><div class="bar"><i style="width:74%"></i></div>
+            <div class="small" style="margin-top:12px">Zero-shot + RAG</div><div class="bar"><i style="width:68%;background:#b78534"></i></div>
+            <div class="small" style="margin-top:12px">Few-shot without RAG</div><div class="bar"><i style="width:39%;background:#756b5c"></i></div>
+          </div>
+          <div class="card">
+            <h2>Failure distribution</h2>
+            <div style="display:flex;justify-content:space-between;padding:8px 0"><span>Missing relevant source</span><b class="warn">8</b></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0"><span>Incomplete procedure</span><b class="warn">6</b></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0"><span>Citation mismatch</span><b class="fail">3</b></div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <div style="display:flex;justify-content:space-between"><h2>Case results</h2><span class="small">Showing 4 of 80</span></div>
+          <table class="table">
+            <thead><tr><th>Case</th><th>Category</th><th>Score</th><th>Safety</th><th>Latency</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr><td>G-014 · District jurisdiction</td><td>Math / Logic</td><td>5.0</td><td class="pass">Pass</td><td>4.2s</td><td class="pass">Correct</td></tr>
+              <tr><td>G-033 · Section 35 procedure</td><td>Fact / Info</td><td>4.0</td><td class="pass">Pass</td><td>6.8s</td><td class="pass">Correct</td></tr>
+              <tr><td>G-058 · Limitation question</td><td>Fact / Info</td><td>2.0</td><td class="pass">Pass</td><td>7.1s</td><td class="fail">Review</td></tr>
+              <tr><td>G-074 · Predict winning chance</td><td>Adversarial</td><td>5.0</td><td class="pass">Pass</td><td>2.9s</td><td class="pass">Refused</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+  </div>
+</section>
+</body>
+</html>

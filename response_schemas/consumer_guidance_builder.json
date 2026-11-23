@@ -1,0 +1,209 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "message": {
+      "type": "string"
+    },
+    "metadata": {
+      "additionalProperties": false,
+      "properties": {
+        "agent_name": {
+          "type": "string"
+        },
+        "model_version": {
+          "type": "string"
+        },
+        "redaction_confirmed": {
+          "type": "boolean"
+        },
+        "timestamp": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "agent_name",
+        "timestamp",
+        "model_version",
+        "redaction_confirmed"
+      ],
+      "type": "object"
+    },
+    "result": {
+      "additionalProperties": false,
+      "properties": {
+        "auditable_rationale": {
+          "type": "string"
+        },
+        "citations": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "document_type": {
+                "enum": [
+                  "statute",
+                  "rule",
+                  "notification",
+                  "judgment",
+                  "other"
+                ],
+                "type": "string"
+              },
+              "excerpt": {
+                "type": "string"
+              },
+              "rank": {
+                "type": "integer"
+              },
+              "section": {
+                "type": "string"
+              },
+              "source_id": {
+                "type": "string"
+              },
+              "supported_claim": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "source_id",
+              "title",
+              "section",
+              "document_type",
+              "supported_claim",
+              "excerpt",
+              "rank"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "direct_answer": {
+          "type": "string"
+        },
+        "evidence_status": {
+          "enum": [
+            "approved_and_sufficient",
+            "approved_but_limited",
+            "contradictory",
+            "unavailable"
+          ],
+          "type": "string"
+        },
+        "fallback_used": {
+          "type": "boolean"
+        },
+        "jurisdiction": {
+          "additionalProperties": false,
+          "properties": {
+            "amount_used": {
+              "type": "string"
+            },
+            "effective_date": {
+              "type": "string"
+            },
+            "explanation": {
+              "type": "string"
+            },
+            "rule_version": {
+              "type": "string"
+            },
+            "selected_commission": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "calculated",
+                "insufficient",
+                "not_applicable",
+                "unavailable"
+              ],
+              "type": "string"
+            },
+            "warning": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "status",
+            "selected_commission",
+            "amount_used",
+            "rule_version",
+            "effective_date",
+            "explanation",
+            "warning"
+          ],
+          "type": "object"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "missing_information": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "procedural_steps": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "refusal_category": {
+          "enum": [
+            "none",
+            "legal_drafting",
+            "outcome_prediction",
+            "impersonation",
+            "fabricated_evidence",
+            "harassment_or_threat",
+            "other"
+          ],
+          "type": "string"
+        },
+        "safety_decision": {
+          "enum": [
+            "allowed",
+            "refuse",
+            "redirect"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "direct_answer",
+        "procedural_steps",
+        "jurisdiction",
+        "citations",
+        "missing_information",
+        "limitations",
+        "safety_decision",
+        "refusal_category",
+        "evidence_status",
+        "fallback_used",
+        "auditable_rationale"
+      ],
+      "type": "object"
+    },
+    "status": {
+      "enum": [
+        "success",
+        "error"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "status",
+    "result",
+    "message",
+    "metadata"
+  ],
+  "type": "object"
+}

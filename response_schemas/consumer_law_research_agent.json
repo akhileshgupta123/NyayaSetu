@@ -1,0 +1,175 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "message": {
+      "type": "string"
+    },
+    "metadata": {
+      "additionalProperties": false,
+      "properties": {
+        "agent_name": {
+          "type": "string"
+        },
+        "model_version": {
+          "type": "string"
+        },
+        "redaction_confirmed": {
+          "type": "boolean"
+        },
+        "timestamp": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "agent_name",
+        "timestamp",
+        "model_version",
+        "redaction_confirmed"
+      ],
+      "type": "object"
+    },
+    "result": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "dense_score": {
+                "type": "number"
+              },
+              "document_type": {
+                "enum": [
+                  "statute",
+                  "rule",
+                  "notification",
+                  "judgment",
+                  "other"
+                ],
+                "type": "string"
+              },
+              "excerpt": {
+                "type": "string"
+              },
+              "fused_score": {
+                "type": "number"
+              },
+              "lexical_score": {
+                "type": "number"
+              },
+              "rank": {
+                "type": "integer"
+              },
+              "relevance_validated": {
+                "type": "boolean"
+              },
+              "rerank_score": {
+                "type": "number"
+              },
+              "section": {
+                "type": "string"
+              },
+              "source_id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "validation_note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "rank",
+              "source_id",
+              "title",
+              "section",
+              "document_type",
+              "excerpt",
+              "lexical_score",
+              "dense_score",
+              "fused_score",
+              "rerank_score",
+              "relevance_validated",
+              "validation_note"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "evidence_quality": {
+          "enum": [
+            "strong",
+            "mixed",
+            "weak",
+            "none",
+            "contradictory"
+          ],
+          "type": "string"
+        },
+        "exact_legal_references": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "fallback_reason": {
+          "type": "string"
+        },
+        "fallback_used": {
+          "type": "boolean"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "normalized_question": {
+          "type": "string"
+        },
+        "retrieval_queries": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "tool_status": {
+          "enum": [
+            "available_and_used",
+            "not_registered",
+            "not_needed",
+            "failed"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "normalized_question",
+        "retrieval_queries",
+        "exact_legal_references",
+        "evidence",
+        "evidence_quality",
+        "tool_status",
+        "fallback_used",
+        "fallback_reason",
+        "limitations"
+      ],
+      "type": "object"
+    },
+    "status": {
+      "enum": [
+        "success",
+        "error"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "status",
+    "result",
+    "message",
+    "metadata"
+  ],
+  "type": "object"
+}

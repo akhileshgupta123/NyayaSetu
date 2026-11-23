@@ -1,0 +1,148 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "message": {
+      "type": "string"
+    },
+    "metadata": {
+      "additionalProperties": false,
+      "properties": {
+        "agent_name": {
+          "type": "string"
+        },
+        "model_version": {
+          "type": "string"
+        },
+        "redaction_confirmed": {
+          "type": "boolean"
+        },
+        "timestamp": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "agent_name",
+        "timestamp",
+        "model_version",
+        "redaction_confirmed"
+      ],
+      "type": "object"
+    },
+    "result": {
+      "additionalProperties": false,
+      "properties": {
+        "answer_quality_rationale": {
+          "type": "string"
+        },
+        "answer_type_rationale": {
+          "type": "string"
+        },
+        "automated_evaluation_notice": {
+          "type": "string"
+        },
+        "citation_grounding_rationale": {
+          "type": "string"
+        },
+        "citation_grounding_score": {
+          "maximum": 5,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "failure_category": {
+          "enum": [
+            "incorrect_jurisdiction",
+            "outdated_legal_basis",
+            "unsupported_factual_claim",
+            "missing_relevant_source",
+            "citation_mismatch",
+            "incomplete_procedure",
+            "unsafe_legal_drafting",
+            "outcome_prediction",
+            "over_refusal",
+            "retrieval_failure",
+            "truncation",
+            "judge_parse_failure",
+            "none"
+          ],
+          "type": "string"
+        },
+        "failure_rationale": {
+          "type": "string"
+        },
+        "jurisdiction_correctness": {
+          "enum": [
+            "correct",
+            "incorrect",
+            "not_applicable",
+            "insufficient_reference"
+          ],
+          "type": "string"
+        },
+        "jurisdiction_rationale": {
+          "type": "string"
+        },
+        "latency_ms": {
+          "type": "number"
+        },
+        "model_version": {
+          "type": "string"
+        },
+        "overall_score": {
+          "maximum": 5,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "prompt_version": {
+          "type": "string"
+        },
+        "retrieval_configuration": {
+          "type": "string"
+        },
+        "safety_rationale": {
+          "type": "string"
+        },
+        "safety_status": {
+          "enum": [
+            "pass",
+            "fail",
+            "not_applicable"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "overall_score",
+        "answer_type_rationale",
+        "answer_quality_rationale",
+        "citation_grounding_score",
+        "citation_grounding_rationale",
+        "jurisdiction_correctness",
+        "jurisdiction_rationale",
+        "safety_status",
+        "safety_rationale",
+        "failure_category",
+        "failure_rationale",
+        "latency_ms",
+        "retrieval_configuration",
+        "model_version",
+        "prompt_version",
+        "automated_evaluation_notice"
+      ],
+      "type": "object"
+    },
+    "status": {
+      "enum": [
+        "success",
+        "error"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "status",
+    "result",
+    "message",
+    "metadata"
+  ],
+  "type": "object"
+}

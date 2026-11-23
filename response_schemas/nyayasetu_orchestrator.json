@@ -1,0 +1,311 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "message": {
+      "type": "string"
+    },
+    "metadata": {
+      "additionalProperties": false,
+      "properties": {
+        "agent_name": {
+          "type": "string"
+        },
+        "model_version": {
+          "type": "string"
+        },
+        "redaction_confirmed": {
+          "type": "boolean"
+        },
+        "timestamp": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "agent_name",
+        "timestamp",
+        "model_version",
+        "redaction_confirmed"
+      ],
+      "type": "object"
+    },
+    "result": {
+      "additionalProperties": false,
+      "properties": {
+        "citations": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "document_type": {
+                "enum": [
+                  "statute",
+                  "rule",
+                  "notification",
+                  "judgment",
+                  "other"
+                ],
+                "type": "string"
+              },
+              "excerpt": {
+                "type": "string"
+              },
+              "rank": {
+                "type": "integer"
+              },
+              "section": {
+                "type": "string"
+              },
+              "source_id": {
+                "type": "string"
+              },
+              "supported_claim": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "source_id",
+              "title",
+              "section",
+              "document_type",
+              "excerpt",
+              "supported_claim",
+              "rank"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "evaluation": {
+          "additionalProperties": false,
+          "properties": {
+            "answer_quality_rationale": {
+              "type": "string"
+            },
+            "answer_type_rationale": {
+              "type": "string"
+            },
+            "automated_evaluation_notice": {
+              "type": "string"
+            },
+            "citation_grounding_score": {
+              "minimum": 0,
+              "type": "number"
+            },
+            "failure_category": {
+              "enum": [
+                "none",
+                "incorrect_jurisdiction",
+                "outdated_legal_basis",
+                "unsupported_factual_claim",
+                "missing_relevant_source",
+                "citation_mismatch",
+                "incomplete_procedure",
+                "unsafe_legal_drafting",
+                "outcome_prediction",
+                "over_refusal",
+                "retrieval_failure",
+                "truncation",
+                "judge_parse_failure"
+              ],
+              "type": "string"
+            },
+            "failure_rationale": {
+              "type": "string"
+            },
+            "jurisdiction_correctness": {
+              "enum": [
+                "correct",
+                "incorrect",
+                "not_applicable",
+                "insufficient_reference"
+              ],
+              "type": "string"
+            },
+            "latency_ms": {
+              "type": "number"
+            },
+            "model_version": {
+              "type": "string"
+            },
+            "overall_score": {
+              "minimum": 0,
+              "type": "number"
+            },
+            "present": {
+              "type": "boolean"
+            },
+            "prompt_version": {
+              "type": "string"
+            },
+            "retrieval_configuration": {
+              "type": "string"
+            },
+            "safety_status": {
+              "enum": [
+                "pass",
+                "fail",
+                "not_applicable"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "present",
+            "overall_score",
+            "answer_type_rationale",
+            "answer_quality_rationale",
+            "citation_grounding_score",
+            "jurisdiction_correctness",
+            "safety_status",
+            "failure_category",
+            "failure_rationale",
+            "latency_ms",
+            "retrieval_configuration",
+            "model_version",
+            "prompt_version",
+            "automated_evaluation_notice"
+          ],
+          "type": "object"
+        },
+        "fallback_used": {
+          "type": "boolean"
+        },
+        "final_answer": {
+          "type": "string"
+        },
+        "jurisdiction": {
+          "additionalProperties": false,
+          "properties": {
+            "amount_used": {
+              "type": "string"
+            },
+            "effective_date": {
+              "type": "string"
+            },
+            "explanation": {
+              "type": "string"
+            },
+            "rule_version": {
+              "type": "string"
+            },
+            "selected_commission": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "calculated",
+                "insufficient",
+                "not_applicable",
+                "unavailable"
+              ],
+              "type": "string"
+            },
+            "warning": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "status",
+            "selected_commission",
+            "amount_used",
+            "rule_version",
+            "effective_date",
+            "explanation",
+            "warning"
+          ],
+          "type": "object"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "missing_information": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "procedural_steps": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "request_classification": {
+          "enum": [
+            "consumer_guidance",
+            "research_only",
+            "evaluation",
+            "prohibited_request",
+            "insufficient_information"
+          ],
+          "type": "string"
+        },
+        "safety_decision": {
+          "enum": [
+            "allowed",
+            "refuse",
+            "redirect"
+          ],
+          "type": "string"
+        },
+        "safety_reason": {
+          "type": "string"
+        },
+        "sub_agents_used": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "tool_status": {
+          "enum": [
+            "not_registered",
+            "available_and_used",
+            "not_needed",
+            "failed"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "request_classification",
+        "safety_decision",
+        "safety_reason",
+        "final_answer",
+        "summary",
+        "procedural_steps",
+        "missing_information",
+        "citations",
+        "jurisdiction",
+        "limitations",
+        "tool_status",
+        "fallback_used",
+        "sub_agents_used",
+        "evaluation"
+      ],
+      "type": "object"
+    },
+    "status": {
+      "enum": [
+        "success",
+        "error"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "status",
+    "result",
+    "message",
+    "metadata"
+  ],
+  "type": "object"
+}

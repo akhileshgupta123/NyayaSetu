@@ -1,0 +1,218 @@
+{
+  "nodes": [
+    {
+      "id": "input",
+      "type": "Input",
+      "label": "Scrubbed Consumer Question",
+      "nodeCategory": "input",
+      "description": "A scrubbed consumer-rights question submitted after application-controlled PII removal."
+    },
+    {
+      "id": "orchestrator",
+      "type": "Agent",
+      "label": "NyayaSetu Orchestrator",
+      "nodeCategory": "agent",
+      "agent_id": "6b03eed24fdf4fe1ecb86043",
+      "description": "Classifies requests, enforces safety boundaries, delegates research and response construction, and assembles the final grounded result."
+    },
+    {
+      "id": "research",
+      "type": "Agent",
+      "label": "Consumer Law Research Agent",
+      "nodeCategory": "agent",
+      "agent_id": "6b03ee884fdf4fe1ecb86036",
+      "description": "Converts the question into retrieval queries, invokes hybrid retrieval, validates source relevance, and returns ranked evidence with metadata."
+    },
+    {
+      "id": "builder",
+      "type": "Agent",
+      "label": "Consumer Guidance Builder",
+      "nodeCategory": "agent",
+      "agent_id": "6b03ee9dfa1816d91a00d8b6",
+      "description": "Produces concise procedural guidance using only approved evidence and deterministic jurisdiction results, with citations and limitations."
+    },
+    {
+      "id": "judge",
+      "type": "Agent",
+      "label": "Evaluation Judge",
+      "nodeCategory": "agent",
+      "agent_id": "6b03eeaffa1816d91a00d8bc",
+      "description": "Grades test responses using the Gold Set rubric, returning scores, rationale, safety status, and a controlled failure category."
+    },
+    {
+      "id": "output",
+      "type": "Output",
+      "label": "Grounded Result",
+      "nodeCategory": "end",
+      "description": "The final structured grounded answer, safe refusal, or automated evaluation result."
+    }
+  ],
+  "edges": [
+    {
+      "source": "input",
+      "target": "orchestrator",
+      "label": "submitted scrubbed question"
+    },
+    {
+      "source": "orchestrator",
+      "target": "research",
+      "label": "delegates retrieval"
+    },
+    {
+      "source": "orchestrator",
+      "target": "builder",
+      "label": "delegates grounded construction"
+    },
+    {
+      "source": "orchestrator",
+      "target": "judge",
+      "label": "delegates evaluation"
+    },
+    {
+      "source": "research",
+      "target": "output",
+      "label": "ranked evidence or controlled retrieval fallback"
+    },
+    {
+      "source": "builder",
+      "target": "output",
+      "label": "grounded answer or safe refusal"
+    },
+    {
+      "source": "judge",
+      "target": "output",
+      "label": "automated evaluation result"
+    },
+    {
+      "source": "orchestrator",
+      "target": "output",
+      "label": "assembled manager result"
+    }
+  ],
+  "agents": [
+    {
+      "agent_id": "6b03ee884fdf4fe1ecb86036",
+      "node_id": "research",
+      "type": "lyzr",
+      "agent_type": "Sub-Agent",
+      "name": "Consumer Law Research Agent",
+      "description": "Converts the question into retrieval queries, invokes hybrid retrieval, validates source relevance, and returns ranked evidence with metadata.",
+      "tools_data_sources": "Local legal-service custom tool: hybrid search and rerank actions",
+      "trigger": "Delegated research request",
+      "provider": "OpenAI",
+      "provider_id": "OpenAI",
+      "model": "gpt-5-mini",
+      "temperature": 0,
+      "top_p": 1
+    },
+    {
+      "agent_id": "6b03ee9dfa1816d91a00d8b6",
+      "node_id": "builder",
+      "type": "lyzr",
+      "agent_type": "Sub-Agent",
+      "name": "Consumer Guidance Builder",
+      "description": "Produces concise procedural guidance using only approved evidence and deterministic jurisdiction results. It must attach citations and limitations.",
+      "tools_data_sources": "Ranked evidence and calculator output supplied by the manager",
+      "trigger": "Research evidence is ready",
+      "provider": "Anthropic",
+      "provider_id": "Anthropic",
+      "model": "anthropic/claude-haiku-4-5",
+      "temperature": 0,
+      "top_p": 1
+    },
+    {
+      "agent_id": "6b03eeaffa1816d91a00d8bc",
+      "node_id": "judge",
+      "type": "lyzr",
+      "agent_type": "Sub-Agent",
+      "name": "Evaluation Judge",
+      "description": "Grades test responses using the Gold Set rubric, returning scores, rationale, safety status, and a controlled failure category.",
+      "tools_data_sources": "Gold reference and generated response supplied by evaluation workflow",
+      "trigger": "Evaluation case completes",
+      "provider": "Google",
+      "provider_id": "Google",
+      "model": "gemini/gemini-2.5-pro",
+      "temperature": 0,
+      "top_p": 1
+    },
+    {
+      "agent_id": "6b03eed24fdf4fe1ecb86043",
+      "node_id": "orchestrator",
+      "type": "lyzr",
+      "agent_type": "Manager",
+      "name": "NyayaSetu Orchestrator",
+      "description": "Classifies requests, enforces safety boundaries, delegates research and response construction, and assembles the final grounded result.",
+      "tools_data_sources": "Local legal-service custom tool; Research Agent; Builder Agent",
+      "trigger": "A scrubbed consumer question is submitted",
+      "provider": "Anthropic",
+      "provider_id": "Anthropic",
+      "model": "anthropic/claude-sonnet-4-6",
+      "temperature": 0,
+      "top_p": 1,
+      "managed_agents": [
+        {
+          "id": "6b03ee884fdf4fe1ecb86036",
+          "name": "Consumer Law Research Agent",
+          "usage_description": "Use for redacted consumer-law retrieval, exact legal-reference lookup, hybrid-search/rerank evidence validation, source metadata, and retrieval limitations."
+        },
+        {
+          "id": "6b03ee9dfa1816d91a00d8b6",
+          "name": "Consumer Guidance Builder",
+          "usage_description": "Use after evidence and deterministic jurisdiction output are available to construct concise procedural guidance, citations, limitations, or a safe refusal/redirect."
+        },
+        {
+          "id": "6b03eeaffa1816d91a00d8bc",
+          "name": "Evaluation Judge",
+          "usage_description": "Use for Gold Set evaluation cases when a generated response, reference answer, rubric, and experiment metadata are supplied."
+        }
+      ]
+    }
+  ],
+  "agents_table_markdown": "| Agent Type | Agent Name | Description | Tools/Data Sources | Trigger | Provider | Model | Temperature | Top_p |\n|---|---|---|---|---|---|---|---:|---:|\n| Manager | NyayaSetu Orchestrator | Classifies requests, enforces safety boundaries, delegates research and response construction, and assembles the final grounded result. | Local legal-service custom tool; Research Agent; Builder Agent | A scrubbed consumer question is submitted | Anthropic | `anthropic/claude-sonnet-4-6` | 0 | 1 |\n| Sub-Agent | Consumer Law Research Agent | Converts the question into retrieval queries, invokes hybrid retrieval, validates source relevance, and returns ranked evidence with metadata. | Local legal-service custom tool: hybrid search and rerank actions | Delegated research request | OpenAI | `gpt-5-mini` | 0 | 1 |\n| Sub-Agent | Consumer Guidance Builder | Produces concise procedural guidance using only approved evidence and deterministic jurisdiction results. It must attach citations and limitations. | Ranked evidence and calculator output supplied by the manager | Research evidence is ready | Anthropic | `anthropic/claude-haiku-4-5` | 0 | 1 |\n| Sub-Agent | Evaluation Judge | Grades test responses using the Gold Set rubric, returning scores, rationale, safety status, and a controlled failure category. | Gold reference and generated response supplied by evaluation workflow | Evaluation case completes | Google | `gemini/gemini-2.5-pro` | 0 | 1 |",
+  "agents_table": [
+    {
+      "Agent Type": "Manager",
+      "Agent Name": "NyayaSetu Orchestrator",
+      "Description": "Classifies requests, enforces safety boundaries, delegates research and response construction, and assembles the final grounded result.",
+      "Tools/Data Sources": "Local legal-service custom tool; Research Agent; Builder Agent",
+      "Trigger": "A scrubbed consumer question is submitted",
+      "Provider": "Anthropic",
+      "Model": "`anthropic/claude-sonnet-4-6`",
+      "Temperature": 0,
+      "Top_p": 1
+    },
+    {
+      "Agent Type": "Sub-Agent",
+      "Agent Name": "Consumer Law Research Agent",
+      "Description": "Converts the question into retrieval queries, invokes hybrid retrieval, validates source relevance, and returns ranked evidence with metadata.",
+      "Tools/Data Sources": "Local legal-service custom tool: hybrid search and rerank actions",
+      "Trigger": "Delegated research request",
+      "Provider": "OpenAI",
+      "Model": "`gpt-5-mini`",
+      "Temperature": 0,
+      "Top_p": 1
+    },
+    {
+      "Agent Type": "Sub-Agent",
+      "Agent Name": "Consumer Guidance Builder",
+      "Description": "Produces concise procedural guidance using only approved evidence and deterministic jurisdiction results. It must attach citations and limitations.",
+      "Tools/Data Sources": "Ranked evidence and calculator output supplied by the manager",
+      "Trigger": "Research evidence is ready",
+      "Provider": "Anthropic",
+      "Model": "`anthropic/claude-haiku-4-5`",
+      "Temperature": 0,
+      "Top_p": 1
+    },
+    {
+      "Agent Type": "Sub-Agent",
+      "Agent Name": "Evaluation Judge",
+      "Description": "Grades test responses using the Gold Set rubric, returning scores, rationale, safety status, and a controlled failure category.",
+      "Tools/Data Sources": "Gold reference and generated response supplied by evaluation workflow",
+      "Trigger": "Evaluation case completes",
+      "Provider": "Google",
+      "Model": "`gemini/gemini-2.5-pro`",
+      "Temperature": 0,
+      "Top_p": 1
+    }
+  ]
+}

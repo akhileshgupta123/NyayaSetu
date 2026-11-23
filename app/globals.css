@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+:root {
+    --font-sans: "Geist Mono", monospace;
+    --font-mono: "Geist Mono", monospace;
+    --background: 0 0% 100%;
+    --foreground: 220.9 39.3% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 220.9 39.3% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220.9 39.3% 11%;
+    --primary: 21.7 65.6% 55.5%;
+    --primary-foreground: 0 0% 17.0434%;
+    --secondary: 180 17.6% 39%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 45.3494%;
+    --accent: 0 0% 93.3%;
+    --accent-foreground: 220.9 39.3% 11%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 11.132%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 21.7 65.6% 55.5%;
+    --chart-1: 180 17.4% 45.1%;
+    --chart-2: 22.3 75.5% 61.6%;
+    --chart-3: 31.2 92.6% 78.8%;
+    --chart-4: 0 0% 53.3%;
+    --chart-5: 0 0% 60%;
+    --radius: 0.75rem;
+    --sidebar-background: 220 14.3% 95.9%;
+    --sidebar-foreground: 220.9 39.3% 11%;
+    --sidebar-primary: 21.7 65.6% 55.5%;
+    --sidebar-primary-foreground: 0 0% 17.0434%;
+    --sidebar-accent: 0 0% 100%;
+    --sidebar-accent-foreground: 220.9 39.3% 11%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 21.7 65.6% 53.3036%;
+}
+
+.dark {
+    --font-sans: "Geist Mono", monospace;
+    --font-mono: "Geist Mono", monospace;
+    --background: 270 5.6% 7.1%;
+    --foreground: 0 0% 75.7%;
+    --card: 0 0% 7.1%;
+    --card-foreground: 0 0% 75.7%;
+    --popover: 270 5.6% 7.1%;
+    --popover-foreground: 0 0% 75.7%;
+    --primary: 22.3 75.5% 61.6%;
+    --primary-foreground: 270 5.6% 7.1%;
+    --secondary: 180 17.4% 45.1%;
+    --secondary-foreground: 270 5.6% 7.1%;
+    --muted: 0 0% 13.3%;
+    --muted-foreground: 0 0% 53.9216%;
+    --accent: 0 0% 20%;
+    --accent-foreground: 0 0% 75.7%;
+    --destructive: 180 17.4% 45.1%;
+    --destructive-foreground: 270 5.6% 7.1%;
+    --border: 0 0% 13.3%;
+    --input: 0 0% 13.3%;
+    --ring: 22.3 75.5% 61.6%;
+    --chart-1: 180 17.4% 45.1%;
+    --chart-2: 22.3 75.5% 61.6%;
+    --chart-3: 31.2 92.6% 78.8%;
+    --chart-4: 0 0% 53.3%;
+    --chart-5: 0 0% 60%;
+    --radius: 0.75rem;
+    --sidebar-background: 0 0% 7.1%;
+    --sidebar-foreground: 0 0% 75.7%;
+    --sidebar-primary: 22.3 75.5% 61.6%;
+    --sidebar-primary-foreground: 270 5.6% 7.1%;
+    --sidebar-accent: 0 0% 20%;
+    --sidebar-accent-foreground: 0 0% 75.7%;
+    --sidebar-border: 0 0% 13.3%;
+    --sidebar-ring: 22.3 75.5% 61.6%;
+}
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+/* Added by the design-system writer: this theme ships a .dark block,
+   so the app supports both schemes. Native controls and the pre-paint
+   scheme resolver in app/layout.tsx both read this. */
+:root {
+    color-scheme: light dark;
+}
