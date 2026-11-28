@@ -1,6 +1,7 @@
 import 'server-only'
 import fs from 'node:fs'
 import path from 'node:path'
+import { determineJurisdiction } from '@/lib/jurisdictionRules'
 import { hybridRetrieve } from '@/lib/hybridRetrieval'
 
 export type CorpusRow = {
@@ -61,10 +62,7 @@ export function classifySafety(text: string) {
 }
 
 export function calculateJurisdiction(value: unknown) {
-  const amount=Number(String(value ?? '').replace(/[^0-9.]/g,''))
-  if (!Number.isFinite(amount) || amount <= 0) return { status:'insufficient', selected_commission:'', amount_used:'', rule_version:'synthetic-demo-2021', effective_date:'', explanation:'A positive consideration-paid amount is required.', warning:'Thresholds in this demonstration must be verified against the authoritative notification.' }
-  const selected_commission=amount<=5_000_000?'District Consumer Disputes Redressal Commission':amount<=20_000_000?'State Consumer Disputes Redressal Commission':'National Consumer Disputes Redressal Commission'
-  return { status:'calculated', selected_commission, amount_used:`₹${amount.toLocaleString('en-IN')}`, rule_version:'synthetic-demo-2021', effective_date:'unverified', explanation:'Selected deterministically from the consideration-paid value using the synthetic 2021 demonstration configuration.', warning:'Demonstration result only. Verify the current official notification before filing.' }
+  return determineJurisdiction(value)
 }
 
 export function retrieve(question: string, limit=3) {
