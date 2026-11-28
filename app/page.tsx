@@ -23,6 +23,7 @@ import {
   FileText,
   FlaskConical,
   Gavel,
+  Gauge,
   History,
   Info,
   KeyRound,
@@ -870,7 +871,8 @@ function EvaluationLab({
   const [judgeMetadata, setJudgeMetadata] = useState<AgentMetadata | null>(null)
   const [judgeResponseStatus, setJudgeResponseStatus] = useState('')
   const [judgeResponseMessage, setJudgeResponseMessage] = useState('')
-  const [loading, setLoading] = useState<'run' | 'judge' | null>(null)
+  const [loading, setLoading] = useState<'run' | 'judge' | 'baseline' | null>(null)
+  const [baseline, setBaseline] = useState<Record<string, unknown> | null>(null)
   const [error, setError] = useState('')
   const [lastRunId, setLastRunId] = useState('')
 
@@ -888,6 +890,27 @@ function EvaluationLab({
   }, [authFetch])
 
   useEffect(() => { void loadRuns() }, [loadRuns])
+
+  const runWeekOneBaseline = async () => {
+    setError('')
+    setLoading('baseline')
+    try {
+      const baselineResponse = await authFetch('/api/local/baseline', { method: 'POST' })
+      const baselinePayload = await baselineResponse.json()
+      if (!baselinePayload.success || !isRecord(baselinePayload.data)) throw new Error(baselinePayload.error ?? 'Week 1 baseline did not return metrics.')
+      setBaseline(baselinePayload.data)
+      const response = await authFetch('/api/evaluation_runs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: 'Week 1 · Naked model baseline · No RAG/tools/agents', status: 'complete', summary: baselinePayload.data }) })
+      await readApiResponse(response)
+      toast.success('Week 1 baseline completed and stored')
+      await loadRuns()
+    } catch (caught) {
+      const message = caught instanceof Error ? caught.message : 'Week 1 baseline could not be completed.'
+      setError(message)
+      toast.error(message)
+    } finally {
+      setLoading(null)
+    }
+  }
 
   const runEvaluation = async () => {
     setError('')
@@ -950,8 +973,9 @@ function EvaluationLab({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-4"><div><p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">Gold Set · Evaluation lab</p><h1 className="mt-2 text-balance font-serif text-3xl tracking-tight sm:text-4xl">Measure before you trust.</h1><p className="mt-3 max-w-3xl text-pretty text-sm leading-6 text-muted-foreground">Run the complete 3×2 experiment grid against the 80-case synthetic Gold Set. Results validate application behavior only and are not evidence of legal accuracy.</p></div><div className="flex flex-wrap gap-2"><Button type="button" variant="outline" onClick={exportResults} className="h-10"><Download className="mr-2 h-4 w-4" /> Export rows</Button><Button type="button" onClick={runEvaluation} disabled={loading !== null} className="h-10 active:scale-[0.98] transition-transform">{loading === 'run' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Play className="mr-2 h-4 w-4" />} Run synthetic evaluation</Button></div></div>
-      <Card className="border-primary/30 bg-primary/5 shadow-sm"><CardContent className="flex items-start gap-3 p-4"><FlaskConical className="mt-0.5 h-5 w-5 shrink-0 text-primary" /><div><p className="text-sm font-semibold">Synthetic Gold Set is active</p><p className="mt-1 text-xs leading-5 text-muted-foreground">The local 80-case set contains 30 math/logic, 30 fact/information, and 20 adversarial cases. All metrics are demonstration-only, not expert-verified legal-system results.</p></div></CardContent></Card>
+      <div className="flex flex-wrap items-end justify-between gap-4"><div><p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">Gold Set · Evaluation lab</p><h1 className="mt-2 text-balance font-serif text-3xl tracking-tight sm:text-4xl">Measure before you trust.</h1><p className="mt-3 max-w-3xl text-pretty text-sm leading-6 text-muted-foreground">Run the complete 3×2 experiment grid against the 80-case synthetic Gold Set. Results validate application behavior only and are not evidence of legal accuracy.</p></div><div className="flex flex-wrap gap-2"><Button type="button" variant="outline" onClick={runWeekOneBaseline} disabled={loading !== null} className="h-10">{loading === 'baseline' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Gauge className="mr-2 h-4 w-4" />} Run Week 1 baseline</Button><Button type="button" variant="outline" onClick={exportResults} className="h-10"><Download className="mr-2 h-4 w-4" /> Export rows</Button><Button type="button" onClick={runEvaluation} disabled={loading !== null} className="h-10 active:scale-[0.98] transition-transform">{loading === 'run' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Play className="mr-2 h-4 w-4" />} Run synthetic evaluation</Button></div></div>
+      <Card className="border-primary/30 bg-primary/5 shadow-sm"><CardContent className="flex items-start gap-3 p-4"><FlaskConical className="mt-0.5 h-5 w-5 shrink-0 text-primary" /><div><p className="text-sm font-semibold">Synthetic Gold Set is active</p><p className="mt-1 text-xs leading-5 text-muted-foreground">The local 80-case set contains 30 math/logic, 30 fact/information, and 20 adversarial cases. Week 1 uses a frozen 20-case subset with no RAG, tools, calculators, examples, or agent delegation. Ollama Qwen is used when reachable; otherwise a clearly labeled deterministic Qwen-compatible fallback keeps the hackathon flow operational.</p></div></CardContent></Card>
+      {baseline ? <Card className="border-primary/30 shadow-sm"><CardHeader className="pb-3"><div className="flex flex-wrap items-start justify-between gap-3"><div><CardTitle className="text-lg">Week 1 naked-model baseline</CardTitle><CardDescription>{String(baseline.disclaimer ?? 'Synthetic baseline result')}</CardDescription></div><Badge variant="outline" className={baseline.backend === 'ollama' ? 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400' : 'border-primary/40 text-primary'}>{String(baseline.backend ?? 'unknown')}</Badge></div></CardHeader><CardContent className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4"><div className="rounded-lg border border-border/70 bg-muted/30 p-4"><p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Measured accuracy</p><p className="mt-2 text-2xl font-semibold tabular-nums">{Math.round(Number(baseline.accuracy ?? 0) * 100)}%</p></div><div className="rounded-lg border border-border/70 bg-muted/30 p-4"><p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Frozen cases</p><p className="mt-2 text-2xl font-semibold tabular-nums">{String(isRecord(baseline.dataset) ? baseline.dataset.total ?? 0 : 0)}</p></div><div className="rounded-lg border border-border/70 bg-muted/30 p-4"><p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Model</p><p className="mt-2 break-words text-sm font-semibold">{String(baseline.model ?? 'unknown')}</p></div><div className="rounded-lg border border-border/70 bg-muted/30 p-4"><p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Run latency</p><p className="mt-2 text-2xl font-semibold tabular-nums">{String(baseline.latency_ms ?? 0)} ms</p></div><div className="sm:col-span-2 lg:col-span-4 rounded-lg border border-border/70 p-3 text-xs leading-5 text-muted-foreground">Temperature 0 · RAG disabled · tools disabled · agents disabled · prompt version frozen-synthetic-week1-v1. This result is stored in Evaluation Runs and never presented as the PRD’s real Qwen3-8B 19% baseline unless Ollama actually produced it.</div></CardContent></Card> : null}
       <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <Card className="shadow-sm"><CardHeader className="pb-3"><CardTitle className="text-lg">Experiment configuration</CardTitle><CardDescription>These controls are saved with each blocked run.</CardDescription></CardHeader><CardContent className="grid gap-4 sm:grid-cols-3"><div><Label htmlFor="prompt-mode">Prompting mode</Label><Select value={promptMode} onValueChange={setPromptMode}><SelectTrigger id="prompt-mode" className="mt-2"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="zero-shot">Zero-shot</SelectItem><SelectItem value="few-shot">Few-shot</SelectItem><SelectItem value="structured-reasoning">Structured reasoning</SelectItem></SelectContent></Select></div><div><Label htmlFor="dataset-category">Dataset scope</Label><Select value={category} onValueChange={setCategory}><SelectTrigger id="dataset-category" className="mt-2"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">All categories</SelectItem><SelectItem value="math-logic">Math / Logic</SelectItem><SelectItem value="fact-information">Fact / Information</SelectItem><SelectItem value="adversarial">Adversarial / safety</SelectItem></SelectContent></Select></div><div className="flex items-end"><div className="flex w-full items-center justify-between rounded-lg border border-border bg-muted/30 px-3 py-2.5"><div><Label htmlFor="rag-enabled" className="cursor-pointer">RAG enabled</Label><p className="mt-1 text-[11px] text-muted-foreground">Stored with run config</p></div><Switch id="rag-enabled" checked={ragEnabled} onCheckedChange={setRagEnabled} /></div></div></CardContent></Card>
         <Card className="shadow-sm"><CardHeader className="pb-3"><CardTitle className="text-lg">Run posture</CardTitle></CardHeader><CardContent><MetricRow label="Prompting" value={promptMode} /><MetricRow label="Retrieval" value={ragEnabled ? 'Enabled' : 'Disabled'} /><MetricRow label="Dataset" value="80 synthetic cases" tone="good" /><MetricRow label="Latest run" value={runs[0]?.status ?? 'No run'} tone={runs[0]?.status === 'complete' ? 'good' : 'warn'} /></CardContent></Card>

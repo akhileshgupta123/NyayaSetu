@@ -91,7 +91,8 @@ export const evaluationRuns = pgTable('evaluation_runs', {
   started_at: timestamp('started_at', { withTimezone: true }),
   completed_at: timestamp('completed_at', { withTimezone: true }),
   summary: jsonb('summary'),
-})
+  owner_user_id: ownerUserId(),
+}, (table) => [index('evaluation_runs_owner_idx').on(table.owner_user_id)])
 
 export const evaluationCases = pgTable('evaluation_cases', {
   id: text('id').primaryKey().$defaultFn(generateId),
@@ -101,7 +102,8 @@ export const evaluationCases = pgTable('evaluation_cases', {
   actual_output: text('actual_output'),
   passed: boolean('passed'),
   evaluation_notes: text('evaluation_notes'),
-})
+  owner_user_id: ownerUserId(),
+}, (table) => [index('evaluation_cases_owner_idx').on(table.owner_user_id)])
 
 export const auditEvents = pgTable('audit_events', {
   id: text('id').primaryKey().$defaultFn(generateId),
