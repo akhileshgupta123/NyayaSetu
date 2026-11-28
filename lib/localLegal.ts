@@ -1,6 +1,7 @@
 import 'server-only'
 import fs from 'node:fs'
 import path from 'node:path'
+import { hybridRetrieve } from '@/lib/hybridRetrieval'
 
 export type CorpusRow = {
   id: string; provenance: 'synthetic_demo'; authoritative: false; topic: string; title: string; section: string
@@ -96,7 +97,7 @@ export async function ollamaStatus() {
 }
 
 export function buildGuidance(question:string, amount?:unknown) {
-  const safety=classifySafety(question); const research=retrieve(question); const jurisdiction=calculateJurisdiction(amount)
+  const safety=classifySafety(question); const research=hybridRetrieve(question); const jurisdiction=calculateJurisdiction(amount)
   if(safety.decision!=='allowed') return {request_classification:'prohibited_request',safety_decision:safety.decision,safety_reason:safety.reason,final_answer:`I cannot help with that request. ${safety.reason} I can instead provide a factual issue summary, a records checklist, or general filing-channel information.`,summary:'The request crossed NyayaSetu’s legal-information boundary.',procedural_steps:['Gather transaction and grievance records.','Verify current official rules.','Consider consulting a qualified advocate for filing-ready work.'],missing_information:[],citations:[],jurisdiction,limitations:['No legal representation or outcome prediction.','Synthetic demonstration dataset only.'],tool_status:'available_and_used',fallback_used:false,sub_agents_used:['Local Safety Classifier'],evaluation:{present:false,overall_score:0,answer_type_rationale:'',answer_quality_rationale:'',citation_grounding_score:0,jurisdiction_correctness:'not_applicable',safety_status:'pass',failure_category:'none',failure_rationale:'',latency_ms:0,retrieval_configuration:'local synthetic hybrid',model_version:'deterministic-local',prompt_version:'synthetic-demo-v1',automated_evaluation_notice:'Not evaluated.'}}
   const citations=research.evidence.map((e:any)=>({source_id:e.source_id,title:e.title,section:e.section,document_type:e.document_type,excerpt:e.excerpt,supported_claim:'General records and procedural preparation for the described issue.',rank:e.rank}))
   return {request_classification:'consumer_guidance',safety_decision:'allowed',safety_reason:safety.reason,final_answer:'Based on the synthetic demonstration corpus, organize the transaction record, proof of the issue, repair or grievance history, and the remedy requested. Send a concise written grievance through an official channel and retain delivery evidence. If unresolved, verify the current official consumer-commission procedure before filing.',summary:'A records-first procedural path is available, but the synthetic corpus is not legal authority.',procedural_steps:['Preserve invoices, payment proof, warranty terms, photographs, and service records.','Send a concise written grievance through an official seller, manufacturer, or platform channel.','Retain acknowledgement and response records.','Verify the current official filing procedure and jurisdiction notification before approaching a commission.'],missing_information:['State and district for territorial routing.','The current authoritative notification and official corpus are not bundled in this synthetic demonstration.'],citations,jurisdiction,limitations:['SYNTHETIC DEMONSTRATION DATA — not legal authority or expert-verified advice.','This system cannot draft filing-ready documents or predict outcomes.'],tool_status:'available_and_used',fallback_used:false,sub_agents_used:['Local Hybrid Retriever','Local Reranker','Local Guidance Builder'],evaluation:{present:false,overall_score:0,answer_type_rationale:'',answer_quality_rationale:'',citation_grounding_score:0,jurisdiction_correctness:'insufficient_reference',safety_status:'pass',failure_category:'none',failure_rationale:'',latency_ms:0,retrieval_configuration:'local synthetic BM25-like + trigram semantic + rerank',model_version:'deterministic-local',prompt_version:'synthetic-demo-v1',automated_evaluation_notice:'Not evaluated.'}}
@@ -106,7 +107,7 @@ export function runEvaluation(promptMode='few-shot', ragEnabled=true, category='
   const started=Date.now(); const selected=getGold().filter((row)=>category==='all'||row.category===category)
   let passed=0, jurisdictionCorrect=0, safetyPassed=0, retrievalHit=0
   const cases=selected.map((row)=>{
-    const safety=classifySafety(row.question); const found=ragEnabled?retrieve(row.question,3):null
+    const safety=classifySafety(row.question); const found=ragEnabled?hybridRetrieve(row.question,3):null
     const expectedRefusal=row.category==='adversarial'; const safetyOk=expectedRefusal?safety.decision==='refuse':safety.decision==='allowed'
     const amountMatch=row.question.match(/₹([\d,]+)/); const amount=amountMatch?Number(amountMatch[1].replaceAll(',','')):0; const jurisdiction=row.category==='math-logic'?calculateJurisdiction(amount):null
     const jurisdictionOk=row.category!=='math-logic'||jurisdiction?.selected_commission===row.expected_answer
